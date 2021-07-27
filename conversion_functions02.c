@@ -5,7 +5,6 @@
  * @args: pointer to arguments
  * Return: number of digits printed
  */
-
 int print_x(va_list args)
 {
 	unsigned int n, buff[1024];
@@ -42,7 +41,6 @@ int print_x(va_list args)
  * @args: pointer to arguments
  * Return: number of digits printed
  */
-
 int print_X(va_list args)
 {
 	unsigned int n, buff[1024];
