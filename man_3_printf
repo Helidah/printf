@@ -1,0 +1,49 @@
+.\"Manpage for printf
+.\"
+.TH _printf "July 24 2021" "1.0" "_printf holberton man page"
+
+.SH NAME
+.B _printf - formatted output conversion and print in the screen.
+
+.SH SYNOPSIS
+.B #include "holberton.h"
+.sp
+.BI "int _printf(const char *format, ...)"
+.ad
+
+.SH DESCRIPTION
+The function prints output on the screen according to a format adescribed below.
+
+.SH RETURN VALUE
+While successful, the function returns the number of characters printed.
+If an error is found, the value returned is -1.
+
+.SH FORMAT OF THE STRING
+The string is a character string, beginning and ending in double quotes,
+composed with ordinary characters which are copied unchanged to the output,
+and conversion specifications introduced by the the character '%'.
+The conversion specification has to match with the corresponding type of the
+variable specified.
+The variables are used in the order given.
+
+.SS c
+The argument passed for specifier '%c' results in a single character printed.
+
+.SS %
+In order to print a '%', the argument passed should be '%%'.
+
+.SS s
+The argument passed is expected to be an array of characters, which are printed
+character by character, not including the terminating NULL byte.
+
+:SS i
+The arguement is converted from integer to character and printed character by 
+character.
+
+:SS d
+Same description as previous.
+
+.SH BUGS
+Not found for now.
+
+.SH AUTHOR
