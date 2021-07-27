@@ -12,7 +12,7 @@
 .ad
 
 .SH DESCRIPTION
-The function prints output on the screen according to a format adescribed below.
+The function prints output on the screen according to the format described below.
 
 .SH RETURN VALUE
 While successful, the function returns the number of characters printed.
