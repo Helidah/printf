@@ -6,7 +6,6 @@
  * @format: text to be formated
  * Return: Lenght of the text
  */
-
 int _printf(const char *format, ...)
 {
 	va_list args;
