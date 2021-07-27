@@ -31,4 +31,4 @@ int print_r(va_list args);
 int print_R(va_list args);
 int _putchar(char c);
 
-#endif
+#endif /* HOLBERTON_H */
