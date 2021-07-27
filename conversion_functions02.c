@@ -1,138 +1,83 @@
 #include "holberton.h"
 
 /**
- * print_x - unsigned int argument is converted to hexa in lowercase
- * @args: pointer to arguments
- * Return: number of digits printed
- */
-int print_x(va_list args)
-{
-	unsigned int n, buff[1024];
-	int i = 0, len = 0;
-	char p;
-
-	n = va_arg(args, int);
-	if (n < 1)
-	{
-		write(1, "0", 1);
-		return (1);
-	}
-	while (n > 0)
-	{
-		buff[len] = n % 16;
-		n /= 16;
-		if (buff[len] > 9)
-			buff[i] = buff[len] + 39;
-		else
-			buff[i] = buff[len];
-		i++;
-		len++;
-	}
-	for (i = len - 1; i >= 0; i--)
-	{
-		p = buff[i] + '0';
-		write(1, &p, 1);
-	}
-	return (len);
-}
-
-/**
- * print_X - unsigned int argument is converted to hexa in uppercase
- * @args: pointer to arguments
- * Return: number of digits printed
- */
-int print_X(va_list args)
-{
-	unsigned int n, buff[1024];
-	int i = 0, len = 0;
-	char p;
-
-	n = va_arg(args, int);
-	if (n < 1)
-	{
-		write(1, "0", 1);
-		return (1);
-	}
-	while (n > 0)
-	{
-		buff[len] = n % 16;
-		n /= 16;
-		if (buff[len] > 9)
-			buff[i] = buff[len] + 7;
-		else
-			buff[i] = buff[len];
-		i++;
-		len++;
-	}
-	for (i = len - 1; i >= 0; i--)
-	{
-		p = buff[i] + '0';
-		write(1, &p, 1);
-	}
-	return (len);
-}
-
-/**
- * print_r - Prints a string in reverse.
- * @args: Variable string.
+ * convert - converter function, a clone of itoa
+ * @num: number
+ * @base: base
+ * @flags: argument flags
+ * @params: paramater struct
  *
- * Return: lenght of the string.
+ * Return: string
  */
-int print_r(va_list args)
+char *convert(long int num, int base, int flags, params_t *params)
 {
-	char *p, s;
-	int i = 0, len = 0;
+static char *array;
+static char buffer[50];
+char sign = 0;
+char *ptr;
+unsigned long n = num;
+(void)params;
 
-	p = va_arg(args, char *);
-	while (p[i] != '\0')
-	{
-		len++;
-		i++;
-	}
-	for (i = len - 1; i >= 0; i--)
-	{
-		s = p[i];
-		write(1, &s, 1);
-	}
-	return (len);
+if (!(flags & CONVERT_UNSIGNED) && num < 0)
+{
+n = -num;
+sign = '-';
+
+}
+array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+ptr = &buffer[49];
+*ptr = '\0';
+
+do {
+*--ptr = array[n % base];
+n /= base;
+} while (n != 0);
+
+if (sign)
+*--ptr = sign;
+return (ptr);
 }
 
 /**
- * print_R - print a string to rot13 encode.
- * @args: Pointer to string.
+ * print_unsigned - prints unsigned integer numbers
+ * @ap: argument pointer
+ * @params: the parameters struct
  *
- * Return: lenght of the string encode in rot13
+ * Return: bytes printed
  */
-int print_R(va_list args)
+int print_unsigned(va_list ap, params_t *params)
 {
-	int i, j, len = 0;
-	char alpha[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"};
-	char ch[] = {"NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm"};
-	char *p, *m;
+unsigned long l;
 
-	p = va_arg(args, char *);
-	for (i = 0; p[i] != '\0'; i++)
-		len++;
-	m = malloc(sizeof(char) * (len + 1));
-	if (!m)
-		return ('\0');
-	for (i = 0; i <= len; i++)
-	{
-		m[i] = p[i];
-	}
-	for (i = 0 ; m[i] != '\0' ; i++)
-	{
-		for (j = 0 ; alpha[j] != '\0' ; j++)
-		{
-			if (m[i] == alpha[j])
-			{
-				m[i] = ch[j];
-				break;
-			}
-		}
-	}
-	for (i = 0; m[i] != '\0'; i++)
-		write(1, &m[i], 1);
-	free(m);
-	return (len);
+if (params->l_modifier)
+l = (unsigned long)va_arg(ap, unsigned long);
+else if (params->h_modifier)
+l = (unsigned short int)va_arg(ap, unsigned int);
+else
+l = (unsigned int)va_arg(ap, unsigned int);
+params->unsign = 1;
+return (print_number(convert(l, 10, CONVERT_UNSIGNED, params), params));
+}
+
+
+
+/**
+ * print_address - prints address
+ * @ap: argument pointer
+ * @params: the parameters struct
+ *
+ * Return: bytes printed
+ */
+int print_address(va_list ap, params_t *params)
+{
+unsigned long int n = va_arg(ap, unsigned long int);
+char *str;
+
+if (!n)
+return (_puts("(nil)"));
+
+str = convert(n, 16, CONVERT_UNSIGNED | CONVERT_LOWERCASE, params);
+*--str = 'x';
+*--str = '0';
+return (print_number(str, params));
 }

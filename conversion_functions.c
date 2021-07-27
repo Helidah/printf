@@ -1,149 +1,106 @@
 #include "holberton.h"
 
 /**
- * print_c - prints a single char
- * @args: arguments received from _printf
- * Return: numbers of chars
+ * print_hex - prints unsigned hex numbers in lowercase
+ * @ap: the argument pointer
+ * @params: the parameters struct
+ *
+ * Return: bytes printed
  */
-int print_c(va_list args)
+int print_hex(va_list ap, params_t *params)
 {
-	char c = va_arg(args, int);
+unsigned long l;
+int c = 0;
+char *str;
 
-	write(1, &c, 1);
-	return (1);
+if (params->l_modifier)
+l = (unsigned long)va_arg(ap, unsigned long);
+else if (params->h_modifier)
+l = (unsigned short int)va_arg(ap, unsigned int);
+else
+l = (unsigned int)va_arg(ap, unsigned int);
+
+str = convert(l, 16, CONVERT_UNSIGNED | CONVERT_LOWERCASE, params);
+if (params->hashtag_flag && l)
+{
+*--str = 'x';
+*--str = '0';
 }
-
-
-/**
- * print_s - prints a string
- * @args: arguments received from _printf
- * Return: number of chars
- */
-int print_s(va_list args)
-{
-	int i;
-	char *str;
-
-	str = va_arg(args, char *);
-	if (str == NULL)
-	{
-		str = "(null)";
-	}
-	for (i = 0; str[i] != '\0'; i++)
-	{
-		write(1, &str[i], 1);
-	}
-	return (i);
-}
-
-
-/**
- * print_i - print integers
- * @args: arguments for _printf
- * Return: number of arguments printed
- */
-int print_i(va_list args)
-{
-	int i, j, cifras = 0, potencia, n, y = 0, bytes = 0;
-	unsigned int a, b;
-
-	n = va_arg(args, int);
-	if (n == 0)
-	{
-		_putchar('0');
-		bytes++;
-		return (bytes);
-	}
-	if (n < 0)
-	{
-		_putchar('-');
-		a = n * -1;
-		bytes++;
-	}
-	else
-	{
-		a = n;
-	}
-	b = a;
-	while ((a / 10) != 0)
-	{
-		cifras++;
-		a /= 10;
-	}
-
-	for (i = 0; i < cifras; i++)
-	{
-		potencia = 1;
-		for (j = i; j < cifras; j++)
-		{
-			potencia = potencia * 10;
-		}
-		y = b / potencia;
-		b = b - (y * potencia);
-		_putchar(y + '0');
-	}
-	_putchar(b + '0');
-	return (bytes + cifras + 1);
+params->unsign = 1;
+return (c += print_number(str, params));
 }
 
 /**
- * print_b - the unsigned int argument is converted to binary
- * @args: taking in arguments
- * Return: number of digits printed
+ * print_HEX - prints unsigned hex numbers in uppercase
+ * @ap: the argument pointer
+ * @params: the parameters struct
+ *
+ * Return: bytes printed
  */
-int print_b(va_list args)
+int print_HEX(va_list ap, params_t *params)
 {
-	unsigned int n, buff[1024];
-	int i, len = 0;
-	char p;
+unsigned long l;
+int c = 0;
+char *str;
 
-	n = va_arg(args, int);
-	if (n < 1)
-	{
-		write(1, "0", 1);
-		return (1);
-	}
-	while (n > 0)
-	{
-		buff[len] = n % 2;
-		n /= 2;
-		len++;
-	}
-	for (i = len - 1; i >= 0; i--)
-	{
-		p = buff[i] + '0';
-		write(1, &p, 1);
-	}
-	return (len);
+if (params->l_modifier)
+l = (unsigned long)va_arg(ap, unsigned long);
+else if (params->h_modifier)
+l = (unsigned short int)va_arg(ap, unsigned int);
+else
+l = (unsigned int)va_arg(ap, unsigned int);
+
+str = convert(l, 16, CONVERT_UNSIGNED, params);
+if (params->hashtag_flag && l)
+{
+*--str = 'X';
+*--str = '0';
+}
+params->unsign = 1;
+return (c += print_number(str, params));
+}
+/**
+ * print_binary - prints unsigned binary number
+ * @ap: the argument pointer
+ * @params: the parameters struct
+ *
+ * Return: bytes printed
+ */
+int print_binary(va_list ap, params_t *params)
+{
+unsigned int n = va_arg(ap, unsigned int);
+char *str = convert(n, 2, CONVERT_UNSIGNED, params);
+int c = 0;
+
+if (params->hashtag_flag && n)
+*--str = '0';
+params->unsign = 1;
+return (c += print_number(str, params));
 }
 
 /**
- * print_o - the unsigned int argument is converted to octal
- * @args: pointer to arguments
- * Return: number of digits printed
+ * print_octal - prints unsigned octal numbers
+ * @ap: the argument pointer
+ * @params: the parameters struct
+ *
+ * Return: bytes printed
  */
-int print_o(va_list args)
+int print_octal(va_list ap, params_t *params)
 {
-	unsigned int n, buff[1024];
-	int i, len = 0;
-	char p;
+unsigned long l;
+char *str;
+int c = 0;
 
-	n = va_arg(args, int);
-	if (n < 1)
-	{
-		write(1, "0", 1);
-		return (1);
-	}
-	while (n > 0)
-	{
-		buff[len] = n % 8;
-		n /= 8;
-		len++;
-	}
-	for (i = len - 1; i >= 0; i--)
-	{
-		p = buff[i] + '0';
-		write(1, &p, 1);
-	}
-	return (len);
+if (params->l_modifier)
+l = (unsigned long)va_arg(ap, unsigned long);
+else if (params->h_modifier)
+l = (unsigned short int)va_arg(ap, unsigned int);
+else
+l = (unsigned int)va_arg(ap, unsigned int);
+str = convert(l, 8, CONVERT_UNSIGNED, params);
+
+if (params->hashtag_flag && l)
+*--str = '0';
+params->unsign = 1;
+return (c += print_number(str, params));
 }

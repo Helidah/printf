@@ -1,35 +1,50 @@
 #include "holberton.h"
 
 /**
- * _printf - prints formated text
+ * _printf - a function that produces output according to a format
  *
- * @format: text to be formated
- * Return: Lenght of the text
+ * @format: a pointer to the format string
+ *
+ * Return: on success, returns the number of characters printed
  */
 int _printf(const char *format, ...)
 {
-	va_list args;
-	int size = 0;
-	print_fx fx[] = {
-		{"c", print_c},
-		{"s", print_s},
-		{"i", print_i},
-		{"d", print_i},
-		{"u", print_i},
-		{"b", print_b},
-		{"o", print_o},
-		{"x", print_x},
-		{"X", print_X},
-		{"r", print_r},
-		{"R", print_R},
-		{NULL, NULL}
-	};
-	va_start(args, format);
-	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
-	{
-		return (-1);
-	}
-	size = aux_func(format, args, fx);
-	va_end(args);
-	return (size);
+int sum = 0;
+va_list ap;
+char *p, *start;
+params_t params = PARAMS_INIT;
+
+va_start(ap, format);
+
+if (!format || (format[0] == '%' && !format[1]))
+return (-1);
+if (format[0] == '%' && format[1] == ' ' && !format[2])
+return (-1);
+for (p = (char *)format; *p; p++)
+{
+init_params(&params, ap);
+if (*p != '%')
+{
+sum += _putchar(*p);
+continue;
+}
+start = p;
+p++;
+while (get_flag(p, &params)) /* while char at p is flag char */
+{
+p++; /* next char */
+}
+p = get_width(p, &params, ap);
+p = get_precision(p, &params, ap);
+if (get_modifier(p, &params))
+p++;
+if (!get_specifier(p))
+sum += print_from_to(start, p,
+params.l_modifier || params.h_modifier ? p - 1 : 0);
+else
+sum += get_print_func(p, ap, &params);
+}
+_putchar(BUF_FLUSH);
+va_end(ap);
+return (sum);
 }
