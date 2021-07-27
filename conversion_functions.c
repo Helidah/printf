@@ -1,4 +1,6 @@
 #include "holberton.h"
+#include <stdlib.h>
+
 
 /**
  * print_c - prints a single char
@@ -181,6 +183,7 @@ int print_S(va_list S)
 	}
 	return (count);
 }
+
 
 /**
  * print_p - prints an address
