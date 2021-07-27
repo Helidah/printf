@@ -59,8 +59,6 @@ params->unsign = 1;
 return (print_number(convert(l, 10, CONVERT_UNSIGNED, params), params));
 }
 
-
-
 /**
  * print_address - prints address
  * @ap: argument pointer
