@@ -30,11 +30,6 @@ int print_x(va_list args);
 int print_r(va_list args);
 int print_R(va_list args);
 int _putchar(char c);
-int print_S(va_list S);
-int print_p(va_list p);
-int print_u(va_list u);
-int print_d(va_list d);
-
 
 
 #endif
