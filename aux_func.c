@@ -8,7 +8,6 @@
  * @fx: list of functions to format text
  * Return: size of printed text
  */
-
 int aux_func(const char *format, va_list args, print_fx *fx)
 {
 	int i = 0, j, size = 0, test = 0;
