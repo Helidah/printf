@@ -37,7 +37,6 @@ int print_s(va_list args)
 }
 
 
-
 /**
  * print_i - print integers
  * @args: arguments for _printf
@@ -87,7 +86,6 @@ int print_i(va_list args)
 	return (bytes + cifras + 1);
 }
 
-#include "holberton.h"
 /**
  * print_b - the unsigned int argument is converted to binary
  * @args: taking in arguments
